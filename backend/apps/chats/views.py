@@ -5,7 +5,7 @@ from rest_framework import status, permissions
 from django.db.models import Q
 from apps.accounts.models import User
 from .models import Room
-from .serializers import RoomSerializer
+from .serializers import RoomSerializer, RoomDetailSerializer
 
 
 class RoomViewSet(APIView):
@@ -57,5 +57,5 @@ class RoomDetailView(APIView):
             return Response({"detail": "You do not have permission to view this room."},
                             status=status.HTTP_403_FORBIDDEN)
         
-        serializer = RoomSerializer(room)
+        serializer = RoomDetailSerializer(room)
         return Response(serializer.data, status=status.HTTP_200_OK)
