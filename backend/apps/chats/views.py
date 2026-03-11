@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -47,3 +48,14 @@ class RoomViewSet(APIView):
         room = Room.objects.create(user_1=user_1, user_2=user_2)
         serializer = RoomSerializer(room)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class RoomDetailView(APIView):
+    def get(self, request, id):
+        room = get_object_or_404(Room, id=id)
+        
+        if request.user != room.user_1 and request.user != room.user_2:
+            return Response({"detail": "You do not have permission to view this room."},
+                            status=status.HTTP_403_FORBIDDEN)
+        
+        serializer = RoomSerializer(room)
+        return Response(serializer.data, status=status.HTTP_200_OK)
