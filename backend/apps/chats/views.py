@@ -50,6 +50,8 @@ class RoomViewSet(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 class RoomDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
     def get(self, request, id):
         room = get_object_or_404(Room, id=id)
         
